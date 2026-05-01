@@ -33,6 +33,7 @@
         }
         .active-nav { background: rgba(255,255,255,0.15) !important; font-weight: bold; box-shadow: inset 6px 0 0 white; }
         .print-only-label { display: none; }
+        
         #noti-content::-webkit-scrollbar { width: 6px; }
         #noti-content::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
     </style>
@@ -48,16 +49,24 @@
             <p class="text-slate-500 mb-8 font-bold dyn-hosp-name">รพ.สต.บ้านท่าฉนวน</p>
             
             <form onsubmit="handleLogin(event)" class="space-y-5 text-left">
-                <div><label class="block text-sm font-bold text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username) <span class="text-rose-500">*</span></label><input type="text" id="login-username" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green font-bold"></div>
-                <div><label class="block text-sm font-bold text-slate-600 mb-1">รหัสผ่าน (Password) <span class="text-rose-500">*</span></label><input type="password" id="login-password" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green font-bold tracking-widest text-center"></div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username) <span class="text-rose-500">*</span></label>
+                    <input type="text" id="login-username" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green font-bold">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-600 mb-1">รหัสผ่าน (Password) <span class="text-rose-500">*</span></label>
+                    <input type="password" id="login-password" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green font-bold tracking-widest text-center">
+                </div>
                 <button type="submit" class="w-full bg-moph-green text-white font-bold py-4 rounded-xl shadow-lg hover:bg-moph-dark transition text-lg mt-4">เข้าสู่ระบบ</button>
             </form>
+            <p class="text-[11px] text-slate-400 mt-6 bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">💡 <b class="text-moph-dark">เข้าสู่ระบบด้วย Username ของท่าน</b></p>
         </div>
     </div>
 
     <!-- ==================== โครงสร้างหลัก (Main App) ==================== -->
     <div id="main-app" class="hidden flex w-full h-screen relative">
-        <!-- แถบเมนูด้านซ้าย -->
+        
+        <!-- แถบเมนูด้านซ้าย (Sidebar) -->
         <aside class="w-72 bg-moph-dark text-white flex flex-col shadow-2xl no-print overflow-y-auto z-20">
             <div class="p-8 border-b border-white/10 text-center">
                 <img src="https://img1.pic.in.th/images/logo-MOPH07b5785917f3c21a.png" alt="Logo" class="h-16 mx-auto mb-4 filter brightness-0 invert drop-shadow-md">
@@ -73,9 +82,9 @@
                 
                 <div class="admin-only pt-6 pb-2 px-4 text-[10px] font-bold text-white/40 uppercase tracking-widest border-t border-white/10">การจัดการระบบ</div>
                 <button onclick="showPage('manage-users')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-manage-users">👤 จัดการบุคลากร</button>
-                <button onclick="showPage('manage-committee')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-manage-committee">👥 ตั้งค่ากรรมการ</button>
+                <button onclick="showPage('manage-committee')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-manage-committee">👥 ตั้งค่ากรรมการตรวจนับ</button>
                 <button onclick="showPage('settings')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-settings">⚙️ ตั้งค่าหน่วยงาน</button>
-                <button onclick="showPage('backup')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-backup">💾 สำรองข้อมูล</button>
+                <button onclick="showPage('backup')" class="nav-btn admin-only w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-backup">💾 สำรองข้อมูล (Backup)</button>
 
                 <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-white/40 uppercase tracking-widest border-t border-white/10">เมนูรายงาน</div>
                 <button onclick="showPage('report-annual')" class="nav-btn w-full text-left p-3 rounded-xl hover:bg-white/10 flex items-center gap-3 transition" id="btn-report-annual">📑 รายงานประจำปี</button>
@@ -86,14 +95,16 @@
 
         <!-- พื้นที่แสดงข้อมูลหลัก -->
         <main class="flex-1 overflow-y-auto w-full relative bg-slate-50">
+            
             <header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-10 shadow-sm no-print">
                 <div class="flex items-center gap-4">
-                    <span class="font-bold text-sm text-slate-500 bg-slate-100 px-3 py-2 rounded-lg hidden md:inline-block">🗓️ ปีงบประมาณการทำงาน:</span>
+                    <span class="font-bold text-sm text-slate-500 bg-slate-100 px-3 py-2 rounded-lg hidden md:inline-block">🗓️ ปีงบประมาณการทำงานปัจจุบัน:</span>
                     <select id="global-fy" onchange="syncFiscalYear()" class="border-2 border-emerald-500 rounded-xl p-2 w-48 bg-emerald-50 font-bold outline-none text-emerald-700 shadow-sm cursor-pointer"></select>
                 </div>
                 <div class="flex items-center gap-3 md:gap-4">
                     <button onclick="showNotiModal()" class="relative p-2 text-slate-400 hover:text-moph-green transition text-2xl" title="ดูการแจ้งเตือน">
-                        🔔<span id="noti-badge" class="absolute top-0 right-0 bg-rose-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white" style="display: none;">0</span>
+                        🔔
+                        <span id="noti-badge" class="absolute top-0 right-0 bg-rose-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white" style="display: none;">0</span>
                     </button>
                     <span id="display-username" class="font-bold text-moph-dark bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100 text-sm hidden md:inline-block"></span>
                     <button onclick="logout()" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50 px-4 py-2 rounded-xl transition font-bold text-sm border border-rose-100">🚪 ออกจากระบบ</button>
@@ -101,7 +112,8 @@
             </header>
 
             <div class="p-8 md:p-10 pb-20">
-                <!-- ==================== 1. หน้า Dashboard ==================== -->
+                
+                <!-- ==================== 1. หน้า Dashboard ภาพรวม ==================== -->
                 <section id="page-dashboard" class="page-content block">
                     <div class="flex items-center gap-6 mb-8 no-print">
                         <div>
@@ -111,9 +123,58 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 no-print text-white">
-                        <div class="bg-gradient-to-br from-moph-dark to-moph-green p-6 rounded-3xl shadow-lg relative overflow-hidden"><div class="absolute -right-4 -top-4 opacity-10 text-8xl">📦</div><p class="text-sm opacity-90 mb-1 font-bold">มูลค่าคงคลัง ณ ปัจจุบัน</p><h3 class="text-4xl font-black" id="dash-total-stock">0.00 ฿</h3></div>
-                        <div class="bg-gradient-to-br from-emerald-500 to-teal-400 p-6 rounded-3xl shadow-lg relative overflow-hidden"><div class="absolute -right-4 -top-4 opacity-10 text-8xl">📥</div><p class="text-sm opacity-90 mb-1 font-bold">มูลค่ารับเข้า (สะสม)</p><h3 class="text-3xl font-black mt-1" id="dash-total-in">0.00 ฿</h3></div>
-                        <div class="bg-gradient-to-br from-rose-500 to-pink-500 p-6 rounded-3xl shadow-lg relative overflow-hidden"><div class="absolute -right-4 -top-4 opacity-10 text-8xl">📤</div><p class="text-sm opacity-90 mb-1 font-bold">มูลค่าจ่ายออก (สะสม)</p><h3 class="text-3xl font-black mt-1" id="dash-total-out">0.00 ฿</h3></div>
+                        <div class="bg-gradient-to-br from-moph-dark to-moph-green p-6 rounded-3xl shadow-lg relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 opacity-10 text-8xl">📦</div>
+                            <p class="text-sm opacity-90 mb-1 font-bold">มูลค่าคงคลัง ณ ปัจจุบัน</p>
+                            <h3 class="text-4xl font-black" id="dash-total-stock">0.00 ฿</h3>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-500 to-teal-400 p-6 rounded-3xl shadow-lg relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 opacity-10 text-8xl">📥</div>
+                            <p class="text-sm opacity-90 mb-1 font-bold">มูลค่ารับเข้า (สะสมทั้งหมด)</p>
+                            <h3 class="text-3xl font-black mt-1" id="dash-total-in">0.00 ฿</h3>
+                        </div>
+                        <div class="bg-gradient-to-br from-rose-500 to-pink-500 p-6 rounded-3xl shadow-lg relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 opacity-10 text-8xl">📤</div>
+                            <p class="text-sm opacity-90 mb-1 font-bold">มูลค่าจ่ายออก (สะสมทั้งหมด)</p>
+                            <h3 class="text-3xl font-black mt-1" id="dash-total-out">0.00 ฿</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 no-print">
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 lg:col-span-1">
+                            <div class="mb-6">
+                                <h3 class="text-lg font-bold text-slate-700 mb-2">สรุปข้อมูลประจำเดือน</h3>
+                                <select id="dash-month-select" onchange="updateMonthlyDash()" class="w-full border-2 border-slate-200 rounded-xl p-3 font-bold outline-none focus:border-moph-green text-moph-dark bg-slate-50"></select>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 flex justify-between items-center">
+                                    <div><p class="text-emerald-600 font-bold text-xs">รับเข้าเดือนนี้</p><h4 class="text-xl font-black text-emerald-700" id="dash-month-in">0.00 ฿</h4></div><div class="text-3xl">📥</div>
+                                </div>
+                                <div class="bg-rose-50 p-5 rounded-2xl border border-rose-100 flex justify-between items-center">
+                                    <div><p class="text-rose-600 font-bold text-xs">จ่ายออกเดือนนี้</p><h4 class="text-xl font-black text-rose-700" id="dash-month-out">0.00 ฿</h4></div><div class="text-3xl">📤</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 lg:col-span-2">
+                            <h3 class="text-lg font-bold text-slate-700 mb-4">📈 แนวโน้มมูลค่าการจ่ายยา (6 เดือนย้อนหลัง)</h3>
+                            <canvas id="trendChart" height="90"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 no-print">
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                            <h3 class="text-lg font-bold text-moph-green mb-4">🔥 5 อันดับยาที่มีมูลค่าการใช้สูงสุด</h3>
+                            <ul id="dash-top5-list" class="space-y-3"></ul>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                            <h3 class="text-lg font-bold text-rose-600 mb-4">💤 ยาที่ไม่มีการเคลื่อนไหว (> 3 เดือน)</h3>
+                            <div class="overflow-y-auto max-h-[250px] pr-2">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-rose-50 text-rose-700 sticky top-0"><tr><th class="p-2 rounded-tl-lg">รายการ</th><th class="p-2 text-center">คงเหลือ</th><th class="p-2 text-right rounded-tr-lg">มูลค่า (฿)</th></tr></thead>
+                                    <tbody id="dash-inactive-list" class="divide-y divide-slate-100"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <h3 class="text-2xl font-bold text-moph-dark mb-4 mt-12 print:mt-0">ตารางเวชภัณฑ์คงเหลือทั้งหมด</h3>
@@ -132,9 +193,14 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                         <h2 class="text-3xl font-bold text-moph-dark">✨ จัดการทะเบียนเวชภัณฑ์</h2>
                         <div class="flex gap-2 w-full md:w-auto">
+                            <!-- ปุ่ม Import CSV -->
                             <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="importCSV(event)">
-                            <button onclick="document.getElementById('csv-file-input').click()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-800 transition">📂 นำเข้ายา (CSV)</button>
-                            <button onclick="openMedModal()" class="bg-moph-green text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-moph-dark transition">+ เพิ่มยาใหม่</button>
+                            <button onclick="document.getElementById('csv-file-input').click()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-800 transition flex items-center gap-2 w-full md:w-auto justify-center">
+                                📂 นำเข้ายา (CSV)
+                            </button>
+                            <button onclick="openMedModal()" class="bg-moph-green text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-moph-dark transition flex items-center gap-2 w-full md:w-auto justify-center">
+                                + เพิ่มยาใหม่
+                            </button>
                         </div>
                     </div>
                     <div id="med-list-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
@@ -145,15 +211,19 @@
                     <div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto">
                         <h2 class="text-2xl font-bold text-emerald-600 mb-8 border-b pb-4">📥 บันทึกรับเวชภัณฑ์เข้าคลัง</h2>
                         <form onsubmit="handleTransaction(event, 'IN')" class="space-y-4">
-                            <label class="block text-sm font-bold text-slate-600 mb-1">เลือกรายการยา</label>
-                            <select id="in-med-id" required class="w-full border-2 rounded-xl p-3 bg-slate-50 outline-none focus:border-emerald-500"></select>
+                            <label class="block text-sm font-bold text-slate-600 mb-1">เลือกรายการยา (แสดงชื่อ พร้อมขนาดบรรจุ)</label>
+                            <select id="in-med-id" required class="w-full border-2 rounded-xl p-3 bg-slate-50 outline-none focus:border-emerald-500 font-bold text-emerald-700"></select>
                             <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1">ปีงบประมาณ</label><input type="text" id="in-fy-display" class="w-full border-2 rounded-xl p-3 font-bold text-emerald-700 bg-slate-100" readonly></div>
                                 <div><label class="block text-sm font-bold text-slate-600 mb-1">วันที่รับเข้า</label><input type="date" id="in-date" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
-                                <div><label class="block text-sm font-bold text-slate-600 mb-1">จำนวนรับเข้า</label><input type="number" id="in-qty" step="0.01" min="0.01" required class="w-full border-2 rounded-xl p-3 text-lg font-bold text-emerald-600 outline-none focus:border-emerald-500"></div>
-                                <div><label class="block text-sm font-bold text-slate-600 mb-1">เลขที่เอกสาร</label><input type="text" id="in-doc" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
+                                
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1">เลขที่เอกสาร</label><input type="text" id="in-doc" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500" placeholder="ใบส่งของ"></div>
                                 <div><label class="block text-sm font-bold text-slate-600 mb-1">Lot Number</label><input type="text" id="in-lot" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
+                                
                                 <div><label class="block text-sm font-bold text-slate-600 mb-1">วันหมดอายุ (EXP)</label><input type="date" id="in-exp" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
-                                <div><label class="block text-sm font-bold text-slate-600 mb-1">รับจากหน่วยงาน</label><input type="text" id="in-source" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1">จำนวนรับเข้า</label><input type="number" id="in-qty" step="0.01" min="0.01" required class="w-full border-2 rounded-xl p-3 text-lg font-bold text-emerald-600 outline-none focus:border-emerald-500"></div>
+                                
+                                <div class="col-span-2"><label class="block text-sm font-bold text-slate-600 mb-1">รับจากหน่วยงาน</label><input type="text" id="in-source" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-emerald-500"></div>
                             </div>
                             <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-emerald-700 transition mt-6 text-lg">ยืนยันรับเข้าสต๊อก</button>
                         </form>
@@ -165,13 +235,16 @@
                     <div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto">
                         <h2 class="text-2xl font-bold text-rose-600 mb-8 border-b pb-4">📤 บันทึกจ่ายเวชภัณฑ์ออก (ระบบ FEFO)</h2>
                         <form onsubmit="handleTransaction(event, 'OUT')" class="space-y-4">
-                            <label class="block text-sm font-bold text-rose-600 mb-1">เลือกรายการยา (แสดงวันหมดอายุใกล้สุด)</label>
+                            <label class="block text-sm font-bold text-rose-600 mb-1">เลือกรายการยา (แสดงขนาดบรรจุ และ วันหมดอายุใกล้สุด)</label>
                             <select id="out-med-id" required class="w-full border-2 rounded-xl p-3 bg-rose-50 outline-none focus:border-rose-500 font-bold text-rose-700"></select>
                             <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1">ปีงบประมาณ</label><input type="text" id="out-fy-display" class="w-full border-2 rounded-xl p-3 font-bold text-rose-700 bg-slate-100" readonly></div>
                                 <div><label class="block text-sm font-bold text-slate-600 mb-1">วันที่จ่ายออก</label><input type="date" id="out-date" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-rose-500"></div>
-                                <div><label class="block text-sm font-bold text-slate-600 mb-1">จำนวนที่จ่าย</label><input type="number" id="out-qty" step="0.01" min="0.01" required class="w-full border-2 rounded-xl p-3 text-lg font-bold text-rose-600 outline-none focus:border-rose-500"></div>
+                                
                                 <div><label class="block text-sm font-bold text-slate-600 mb-1">เลขที่ใบเบิก</label><input type="text" id="out-doc" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-rose-500"></div>
-                                <div><label class="block text-sm font-bold text-slate-600 mb-1">จ่ายให้หน่วยงาน</label><input type="text" id="out-dest" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-rose-500"></div>
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1">จำนวนที่จ่าย</label><input type="number" id="out-qty" step="0.01" min="0.01" required class="w-full border-2 rounded-xl p-3 text-lg font-bold text-rose-600 outline-none focus:border-rose-500"></div>
+                                
+                                <div class="col-span-2"><label class="block text-sm font-bold text-slate-600 mb-1">จ่ายให้หน่วยงาน</label><input type="text" id="out-dest" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-rose-500"></div>
                             </div>
                             <button type="submit" class="w-full bg-rose-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-rose-700 transition mt-6 text-lg">ยืนยันจ่ายออก (ตัดสต๊อก)</button>
                         </form>
@@ -197,7 +270,7 @@
                         <div class="grid grid-cols-2 gap-y-4 mb-8 text-sm border-b pb-6 text-black">
                             <div><b>ชื่อสินค้า:</b> <span id="sc-name" class="border-b border-black px-2 inline-block min-w-[200px]">-</span></div>
                             <div><b>หมวดหมู่:</b> <span id="sc-category" class="border-b border-black px-2 inline-block min-w-[200px]">-</span></div>
-                            <div><b>หน่วยนับ:</b> <span id="sc-unit" class="border-b border-black px-2 inline-block min-w-[200px]">-</span></div>
+                            <div><b>หน่วยนับ:</b> <span id="sc-unit" class="border-b border-black px-2 inline-block min-w-[200px] text-blue-700 font-bold">-</span></div>
                             <div><b>ราคาต่อหน่วย:</b> <span id="sc-price" class="border-b border-black px-2 inline-block min-w-[200px]">-</span></div>
                         </div>
                         <table class="w-full text-center border-collapse border border-red-700 text-black">
@@ -223,25 +296,127 @@
                     </div>
                 </section>
 
-                <!-- ==================== 6. หน้าอื่นๆ (ซ่อนไว้เพื่อประหยัดพื้นที่โค้ด แต่ทำงานปกติ) ==================== -->
-                <!-- หน้า จัดการผู้ใช้งาน -->
+                <!-- ==================== 6. หน้า จัดการผู้ใช้งาน (Personnel) ==================== -->
                 <section id="page-manage-users" class="page-content hidden">
-                    <div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-moph-dark mb-8">👤 จัดการบุคลากรผู้เข้าใช้งานระบบ</h2><div class="bg-white p-8 rounded-3xl shadow-sm border mb-8"><form id="user-form" onsubmit="savePersonnel(event)" class="space-y-5"><input type="hidden" id="edit-user-id"><div class="grid grid-cols-1 md:grid-cols-2 gap-5"><div><label class="block text-sm font-bold mb-1">Username <span class="text-rose-500">*</span></label><input type="text" id="user-username" required class="w-full border-2 rounded-xl p-3 bg-slate-50"></div><div><label class="block text-sm font-bold mb-1">Password <span class="text-rose-500">*</span></label><input type="text" id="user-password" required class="w-full border-2 rounded-xl p-3 bg-slate-50"></div><div><label class="block text-sm font-bold mb-1">ชื่อ-นามสกุล <span class="text-rose-500">*</span></label><input type="text" id="user-fullname" required class="w-full border-2 rounded-xl p-3"></div><div><label class="block text-sm font-bold mb-1">ตำแหน่ง</label><input type="text" id="user-position" required class="w-full border-2 rounded-xl p-3"></div><div class="md:col-span-2"><label class="block text-sm font-bold mb-1">สิทธิ์ <span class="text-rose-500">*</span></label><select id="user-role" required class="w-full border-2 rounded-xl p-3 font-bold bg-emerald-50"><option value="user">ผู้ใช้งานทั่วไป</option><option value="admin">ผู้ดูแลระบบ</option></select></div></div><div class="flex gap-4 mt-6"><button type="submit" class="bg-moph-green text-white font-bold py-3 px-8 rounded-xl hover:bg-moph-dark transition text-lg">บันทึกข้อมูล</button><button type="button" onclick="resetUserForm()" class="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-xl hover:bg-slate-300 transition text-lg">ยกเลิก</button></div></form></div><div class="bg-white rounded-3xl shadow-sm border overflow-x-auto"><table class="w-full text-left"><thead class="bg-slate-50 border-b"><tr><th class="p-4 font-bold">Username</th><th class="p-4 font-bold">ชื่อ-นามสกุล</th><th class="p-4 font-bold">ตำแหน่ง / สิทธิ์</th><th class="p-4 font-bold text-center">จัดการ</th></tr></thead><tbody id="users-table" class="divide-y divide-slate-100 text-sm"></tbody></table></div></div>
+                    <div class="max-w-4xl mx-auto">
+                        <h2 class="text-3xl font-bold text-moph-dark mb-8">👤 จัดการบุคลากรผู้เข้าใช้งานระบบ</h2>
+                        
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-8">
+                            <form id="user-form" onsubmit="savePersonnel(event)" class="space-y-5">
+                                <input type="hidden" id="edit-user-id">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div><label class="block text-sm font-bold text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username) <span class="text-rose-500">*</span></label><input type="text" id="user-username" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green bg-slate-50"></div>
+                                    <div><label class="block text-sm font-bold text-slate-600 mb-1">รหัสผ่าน (Password) <span class="text-rose-500">*</span></label><input type="text" id="user-password" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green bg-slate-50"></div>
+                                    <div><label class="block text-sm font-bold text-slate-600 mb-1">ชื่อ-นามสกุล <span class="text-rose-500">*</span></label><input type="text" id="user-fullname" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green"></div>
+                                    <div><label class="block text-sm font-bold text-slate-600 mb-1">ตำแหน่ง</label><input type="text" id="user-position" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green"></div>
+                                    <div class="md:col-span-2"><label class="block text-sm font-bold text-slate-600 mb-1">สิทธิ์การเข้าใช้งาน <span class="text-rose-500">*</span></label><select id="user-role" required class="w-full border-2 rounded-xl p-3 outline-none focus:border-moph-green font-bold text-moph-dark bg-emerald-50"><option value="user">ผู้ใช้งานทั่วไป (ดูข้อมูลได้อย่างเดียว)</option><option value="admin">ผู้ดูแลระบบ (จัดการได้ทุกเมนู)</option></select></div>
+                                </div>
+                                <div class="flex gap-4 mt-6"><button type="submit" class="bg-moph-green text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-moph-dark transition text-lg">บันทึกข้อมูลบุคลากร</button><button type="button" onclick="resetUserForm()" class="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-xl hover:bg-slate-300 transition text-lg">ยกเลิก</button></div>
+                            </form>
+                        </div>
+                        <div class="bg-white rounded-3xl shadow-sm border overflow-x-auto"><table class="w-full text-left"><thead class="bg-slate-50 border-b"><tr><th class="p-4 font-bold text-slate-500">Username</th><th class="p-4 font-bold text-slate-500">ชื่อ-นามสกุล</th><th class="p-4 font-bold text-slate-500">ตำแหน่ง / สิทธิ์</th><th class="p-4 font-bold text-slate-500 text-center">จัดการ</th></tr></thead><tbody id="users-table" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
+                    </div>
                 </section>
-                
-                <!-- หน้า ตั้งค่าหน่วยงาน และ กรรมการ -->
-                <section id="page-settings" class="page-content hidden"><div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto"><h2 class="text-3xl font-bold text-moph-dark mb-8">⚙️ ตั้งค่าหน่วยงาน</h2><form onsubmit="saveSettings(event)" class="space-y-5 text-sm font-bold text-slate-700"><div><label class="block mb-2">ชื่อสถานบริการ</label><input type="text" id="set-hosp" required class="w-full border-2 rounded-2xl p-4 bg-slate-50"></div><div class="grid grid-cols-2 gap-5"><div><label class="block mb-2">ชื่อ ผอ. รพ.สต.</label><input type="text" id="set-dir" required class="w-full border-2 rounded-2xl p-4"></div><div><label class="block mb-2 text-rose-600">ชื่อ ผอ. รพ.แม่ข่าย</label><input type="text" id="set-hosp-dir" required class="w-full border-2 rounded-2xl p-4"></div></div><div class="grid grid-cols-2 gap-5"><div><label class="block mb-2">ชื่อ ผู้เบิกยา</label><input type="text" id="set-req" required class="w-full border-2 rounded-2xl p-4"></div><div><label class="block mb-2">ชื่อ ผู้ดูแลคลัง</label><input type="text" id="set-mgr" required class="w-full border-2 rounded-2xl p-4"></div></div><button type="submit" class="w-full bg-moph-green text-white font-black py-4 rounded-2xl shadow-xl hover:bg-moph-dark transition mt-6 text-lg">💾 บันทึกการตั้งค่า</button></form></div></section>
-                <section id="page-manage-committee" class="page-content hidden"><div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto"><h2 class="text-2xl font-bold text-moph-dark mb-6">👥 ตั้งค่ากรรมการ</h2><form onsubmit="saveCommittee(event)" class="space-y-6"><div><label class="block text-sm font-bold mb-2">เลือกปีงบประมาณ</label><select id="comm-year" onchange="document.getElementById('global-fy').value = this.value; syncFiscalYear();" class="w-full border-2 rounded-xl p-3 bg-slate-50 font-bold cursor-pointer"></select></div><div class="p-6 bg-emerald-50 rounded-3xl space-y-4 border"><p class="font-bold text-moph-green border-b pb-2">ประธานกรรมการ</p><input type="text" id="chair-name" placeholder="ชื่อ-นามสกุล" class="w-full border-2 rounded-xl p-3" required><input type="text" id="chair-pos" placeholder="ตำแหน่ง" class="w-full border-2 rounded-xl p-3" required></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="p-6 bg-slate-50 rounded-3xl space-y-4 border"><p class="font-bold border-b pb-2">กรรมการ 1</p><input type="text" id="m1-name" class="w-full border-2 rounded-xl p-3" required><input type="text" id="m1-pos" class="w-full border-2 rounded-xl p-3" required></div><div class="p-6 bg-slate-50 rounded-3xl space-y-4 border"><p class="font-bold border-b pb-2">กรรมการ 2</p><input type="text" id="m2-name" class="w-full border-2 rounded-xl p-3" required><input type="text" id="m2-pos" class="w-full border-2 rounded-xl p-3" required></div></div><button type="submit" class="w-full bg-moph-green text-white font-black py-4 rounded-2xl shadow-xl hover:bg-moph-dark transition">บันทึกรายชื่อกรรมการ</button></form></div></section>
-                
-                <!-- หน้า สร้างใบเบิกยา (Low Stock Requisition) - อัปเดตขนาดบรรจุ -->
+
+                <!-- ==================== 6.2 จัดการตั้งค่า และ กรรมการ ==================== -->
+                <section id="page-settings" class="page-content hidden">
+                    <div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto">
+                        <h2 class="text-3xl font-bold text-moph-dark mb-8">⚙️ ตั้งค่าหน่วยงาน</h2>
+                        <form onsubmit="saveSettings(event)" class="space-y-5 text-sm font-bold text-slate-700">
+                            <div><label class="block mb-2">ชื่อสถานบริการ</label><input type="text" id="set-hosp" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green bg-slate-50"></div>
+                            <div class="grid grid-cols-2 gap-5">
+                                <div><label class="block mb-2">ชื่อ ผู้อำนวยการ รพ.สต.</label><input type="text" id="set-dir" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green"></div>
+                                <div><label class="block mb-2 text-rose-600">ชื่อ ผู้อำนวยการ รพ.แม่ข่าย (ผู้สั่งจ่าย)</label><input type="text" id="set-hosp-dir" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-5">
+                                <div><label class="block mb-2">ชื่อ ผู้เบิกยา (เริ่มต้นในแบบฟอร์ม)</label><input type="text" id="set-req" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green"></div>
+                                <div><label class="block mb-2">ชื่อ ผู้ดูแลคลัง (ผู้จ่าย)</label><input type="text" id="set-mgr" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green"></div>
+                            </div>
+                            <button type="submit" class="w-full bg-moph-green text-white font-black py-4 rounded-2xl shadow-xl hover:bg-moph-dark transition mt-6 text-lg">💾 บันทึกการตั้งค่า</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="page-manage-committee" class="page-content hidden">
+                    <div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto">
+                        <h2 class="text-2xl font-bold text-moph-dark mb-6">👥 ตั้งค่าคณะกรรมการตรวจนับประจำปีงบประมาณ</h2>
+                        <form onsubmit="saveCommittee(event)" class="space-y-6">
+                            <div><label class="block text-sm font-bold mb-2">เลือกปีงบประมาณ</label><select id="comm-year" onchange="document.getElementById('global-fy').value = this.value; syncFiscalYear();" class="w-full border-2 rounded-xl p-3 bg-slate-50 outline-none font-bold text-moph-dark cursor-pointer"></select></div>
+                            <div class="p-6 bg-emerald-50 rounded-3xl space-y-4 border border-emerald-100">
+                                <p class="font-bold text-moph-green border-b border-emerald-200 pb-2">ประธานกรรมการ</p>
+                                <input type="text" id="chair-name" placeholder="ชื่อ-นามสกุล" class="w-full border-2 rounded-xl p-3 outline-none" required><input type="text" id="chair-pos" placeholder="ตำแหน่ง" class="w-full border-2 rounded-xl p-3 outline-none" required>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-6 bg-slate-50 rounded-3xl space-y-4 border border-slate-200"><p class="font-bold text-slate-600 border-b pb-2">กรรมการคนที่ 1</p><input type="text" id="m1-name" class="w-full border-2 rounded-xl p-3 outline-none" required><input type="text" id="m1-pos" class="w-full border-2 rounded-xl p-3 outline-none" required></div>
+                                <div class="p-6 bg-slate-50 rounded-3xl space-y-4 border border-slate-200"><p class="font-bold text-slate-600 border-b pb-2">กรรมการคนที่ 2</p><input type="text" id="m2-name" class="w-full border-2 rounded-xl p-3 outline-none" required><input type="text" id="m2-pos" class="w-full border-2 rounded-xl p-3 outline-none" required></div>
+                            </div>
+                            <button type="submit" class="w-full bg-moph-green text-white font-black py-4 rounded-2xl shadow-xl hover:bg-moph-dark transition">บันทึกรายชื่อกรรมการ</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ==================== 7. หน้า รายงานประจำปี ==================== -->
+                <section id="page-report-annual" class="page-content hidden">
+                    <div class="no-print mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <h2 class="text-3xl font-bold text-moph-dark">📊 รายงานสรุปการรับ-จ่ายประจำปี</h2>
+                        <div class="flex gap-4 items-center">
+                            <span class="font-bold text-sm text-slate-500">ปีงบประมาณ:</span>
+                            <select id="annual-year-select" onchange="document.getElementById('global-fy').value = this.value; syncFiscalYear();" class="border-2 border-moph-green rounded-xl p-3 font-bold text-moph-dark outline-none cursor-pointer"></select>
+                            <button onclick="printLandscapeReport()" class="bg-moph-dark text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-slate-800 transition">🖨️ พิมพ์รายงาน (แนวนอน)</button>
+                        </div>
+                    </div>
+                    <div class="print-area bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 overflow-x-auto text-black">
+                        <div class="text-center mb-8">
+                            <h3 class="font-bold text-xl mb-2" id="annual-report-title">รายงานการรับจ่ายพัสดุ ประจำปีงบประมาณ</h3>
+                            <p class="text-sm dyn-hosp-name font-bold">รพ.สต.บ้านท่าฉนวน</p>
+                        </div>
+                        <table class="w-full text-[11px] border-collapse text-center mb-16">
+                            <thead class="bg-slate-50 font-bold border">
+                                <tr>
+                                    <th rowspan="2" class="border p-2">ลำดับ</th><th rowspan="2" class="border p-2">รายการเวชภัณฑ์</th><th rowspan="2" class="border p-2">หน่วย (ขนาดบรรจุ)</th><th rowspan="2" class="border p-2">ราคา/หน่วย</th>
+                                    <th colspan="3" class="border p-2 bg-emerald-50 text-emerald-800">รับเข้าปีงบประมาณ</th><th colspan="2" class="border p-2 bg-rose-50 text-rose-800">จ่ายออกปีงบประมาณ</th><th colspan="2" class="border p-2 bg-blue-50 text-blue-800">คงเหลือสิ้นปี</th>
+                                </tr>
+                                <tr>
+                                    <th class="border p-2 text-rose-600">ยอดยกมา</th><th class="border p-2">จำนวน</th><th class="border p-2">มูลค่า</th><th class="border p-2">จำนวน</th><th class="border p-2">มูลค่า</th><th class="border p-2">จำนวน</th><th class="border p-2">รวมมูลค่า</th>
+                                </tr>
+                            </thead>
+                            <tbody id="annual-report-table"></tbody>
+                        </table>
+                        <div id="annual-report-signatures" class="page-break-inside-avoid"></div>
+                    </div>
+                </section>
+
+                <!-- ==================== 8. หน้า ยาใกล้หมดอายุ ==================== -->
+                <section id="page-report-expiry" class="page-content hidden">
+                    <div class="no-print mb-8 flex flex-col md:flex-row justify-between items-center gap-4 text-moph-dark">
+                        <h2 class="text-3xl font-bold">⏳ รายงานเวชภัณฑ์ใกล้หมดอายุ</h2>
+                        <div class="flex gap-4">
+                            <select id="expiry-filter-select" onchange="generateExpiryReport()" class="border-2 border-orange-500 rounded-xl p-3 bg-white font-bold outline-none text-orange-600">
+                                <option value="expired">🚨 ยาที่หมดอายุแล้ว</option><option value="30" selected>⚠️ หมดอายุภายใน 30 วัน</option><option value="60">หมดอายุภายใน 60 วัน</option><option value="90">หมดอายุภายใน 90 วัน</option>
+                            </select>
+                            <button onclick="printPortraitReport()" class="bg-orange-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-orange-600 transition">🖨️ พิมพ์รายการ</button>
+                        </div>
+                    </div>
+                    <div class="print-area bg-white p-10 rounded-3xl shadow-sm border border-slate-200">
+                        <h3 class="text-center font-bold text-2xl mb-8">บัญชีรายการเวชภัณฑ์ใกล้หมดอายุ</h3>
+                        <table class="w-full text-left border-collapse text-black">
+                            <thead class="bg-slate-50 text-sm font-bold">
+                                <tr><th class="border p-4">ชื่อเวชภัณฑ์</th><th class="border p-4 text-center">เลขที่ Lot</th><th class="border p-4 text-center">วันหมดอายุ</th><th class="border p-4 text-right">จำนวนคงเหลือใน Lot</th><th class="border p-4 text-center">หน่วยนับ (ขนาดบรรจุ)</th></tr>
+                            </thead>
+                            <tbody id="expiry-report-table" class="text-sm"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==================== 9. หน้า สร้างใบเบิกยา (Low Stock Requisition) ==================== -->
                 <section id="page-report-lowstock" class="page-content hidden">
                     <div class="no-print mb-8">
-                        <h2 class="text-3xl font-bold text-moph-dark mb-6">📝 สร้างใบเบิกยา (แจ้งเตือนสต๊อกต่ำ)</h2>
+                        <h2 class="text-3xl font-bold text-moph-dark mb-6">📝 สร้างใบเบิกยา (จากรายการแจ้งเตือนสต๊อกต่ำ)</h2>
                         <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div><label class="text-xs font-bold text-slate-500 mb-1 block">เลขที่เอกสาร</label><input type="text" id="input-doc-no" placeholder="เช่น 123/2569" class="w-full border-b-2 outline-none p-2 focus:border-moph-green font-bold text-moph-dark text-lg" oninput="updatePrintLabel('lbl-doc-no', this.value)"></div>
                             <div><label class="text-xs font-bold text-slate-500 mb-1 block">วันที่ทำรายการ</label><input type="date" id="input-req-date" class="w-full border-b-2 outline-none p-2 focus:border-moph-green font-bold text-moph-dark text-lg" onchange="updateDateLabel('lbl-req-date', this.value)"></div>
                         </div>
-                        <div class="flex justify-end"><button onclick="printPortraitReport()" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition flex items-center gap-2 text-lg">🖨️ พิมพ์ใบเบิกยา (A4)</button></div>
+                        <div class="flex justify-end"><button onclick="printPortraitReport()" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition flex items-center gap-2 text-lg">🖨️ พิมพ์ใบเบิกยา (A4 แนวตั้ง)</button></div>
                     </div>
 
                     <div class="print-area bg-white p-12 rounded-3xl shadow-sm border border-slate-200 text-[15px] font-sans text-black leading-relaxed">
@@ -251,6 +426,7 @@
                             <div class="text-center">เขียนที่ <span class="dyn-hosp-name font-bold">รพ.สต.บ้านท่าฉนวน</span></div>
                             <div class="text-center mt-2">วันที่ <span id="lbl-req-date" class="inline-block px-2 text-center text-blue-800 font-bold border-b border-dashed border-slate-300 print:border-none print:text-black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                         </div>
+
                         <div class="mb-4 font-bold"><div>เรื่อง ขอเบิกยาจากคลัง</div><div>เรียน ผู้อำนวยการโรงพยาบาลกงไกรลาศ</div></div>
                         <div class="indent-16 mb-4 text-justify">เนื่องด้วยหน่วยงาน <span class="dyn-hosp-name font-bold">รพ.สต.บ้านท่าฉนวน</span> อำเภอกงไกรลาศ จังหวัดสุโขทัย ประสงค์เบิกยาเพื่อใช้ในงานบริการผู้ป่วยที่มารับการรักษา ตามรายงานและจำนวนข้างล่างนี้</div>
                         
@@ -262,20 +438,40 @@
                             </thead>
                             <tbody id="lowstock-report-table"></tbody>
                         </table>
-                        <div class="text-center italic opacity-50 page-break-inside-avoid">-- ส่วนลายเซ็นอนุมัติ / รับ-จ่ายยา อยู่ด้านล่าง --</div>
+
+                        <div class="grid grid-cols-2 gap-x-12 gap-y-12 text-center mt-12 page-break-inside-avoid">
+                            <div class="space-y-6"><div class="font-bold">เสนอ ผู้อำนวยการโรงพยาบาลกงไกรลาศ<br>-เพื่อโปรดพิจารณาอนุมัติจ่าย</div><div class="mt-8">..........................................................<br>(<span id="lbl-director" class="inline-block min-w-[150px] px-2 font-bold text-center mt-2 text-blue-800 border-b border-dashed border-slate-300 print:border-none print:text-black"></span>)<br>ตำแหน่ง ผู้อำนวยการ <span class="dyn-hosp-name"></span><br>วันที่............/............/............</div></div>
+                            <div class="space-y-6"><div class="font-bold"><span class="underline">ความเห็นของผู้สั่งจ่าย</span><br><br>( &nbsp;&nbsp;&nbsp;&nbsp; ) อนุมัติ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp;&nbsp;&nbsp;&nbsp; ) ไม่อนุมัติ</div><div class="mt-8">..........................................................<br>(<span id="lbl-hosp-director" class="inline-block min-w-[150px] px-2 font-bold text-center mt-2 text-blue-800 border-b border-dashed border-slate-300 print:border-none print:text-black"></span>)<br>ผู้อำนวยการโรงพยาบาลกงไกรลาศ<br>........../........../..........</div></div>
+                            <div class="space-y-6 flex flex-col justify-end"><div class="font-bold">ได้รับสิ่งของตามใบเบิกนี้ถูกต้องเรียบร้อยแล้ว</div><div class="mt-8">.......................................................... ผู้รับ<br>(..........................................................)<br>........../........../..........</div></div>
+                            <div class="space-y-6 flex flex-col justify-end"><div class="mt-8">.......................................................... ผู้จ่าย (ผู้ดูแลคลัง)<br>(<span id="lbl-manager" class="inline-block min-w-[150px] px-2 font-bold text-center mt-2 text-blue-800 border-b border-dashed border-slate-300 print:border-none print:text-black"></span>)<br>........../........../..........</div></div>
+                        </div>
                     </div>
                 </section>
 
-                <!-- หน้า Backup & Reports อื่นๆ -->
-                <section id="page-backup" class="page-content hidden"><div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto text-center"><span class="text-6xl mb-4 block">💾</span><h2 class="text-3xl font-bold text-moph-dark mb-8">สำรองข้อมูลระบบ (Backup)</h2><div class="space-y-4"><button onclick="exportToCSV('medicines')" class="w-full bg-slate-50 border-2 hover:border-emerald-500 font-bold p-5 rounded-2xl transition flex justify-between"><span>📊 ดาวน์โหลดข้อมูลเวชภัณฑ์ (CSV)</span></button><button onclick="exportToCSV('stock_transactions')" class="w-full bg-slate-50 border-2 hover:border-blue-500 font-bold p-5 rounded-2xl transition flex justify-between"><span>📝 ดาวน์โหลดประวัติรับ-จ่าย (CSV)</span></button></div></div></section>
-                <section id="page-report-annual" class="page-content hidden"><div class="text-center font-bold text-3xl mt-20 opacity-50">ส่วนการทำงานของรายงานประจำปี (โค้ด JS ทำงานปกติ)</div></section>
-                <section id="page-report-expiry" class="page-content hidden"><div class="text-center font-bold text-3xl mt-20 opacity-50">ส่วนการทำงานของรายงานยาหมดอายุ (โค้ด JS ทำงานปกติ)</div></section>
+                <!-- ==================== 10. สำรองข้อมูล (Backup) ==================== -->
+                <section id="page-backup" class="page-content hidden">
+                    <div class="max-w-2xl bg-white p-10 rounded-[40px] shadow-lg border mx-auto">
+                        <div class="text-center mb-10"><span class="text-6xl mb-4 block">💾</span><h2 class="text-3xl font-bold text-moph-dark">สำรองข้อมูลระบบ (Backup)</h2><p class="text-slate-500 mt-2">ดาวน์โหลดข้อมูลเพื่อเก็บไว้ในเครื่อง หรือแนบส่งเข้าอีเมลเพื่อความปลอดภัย</p></div>
+                        <div class="space-y-4">
+                            <button onclick="exportToCSV('medicines')" class="w-full bg-slate-50 border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 text-slate-700 font-bold p-5 rounded-2xl transition flex items-center justify-between group"><div class="flex items-center gap-4"><span class="text-3xl">📊</span> <span>ดาวน์โหลดข้อมูลเวชภัณฑ์ทั้งหมด (CSV)</span></div><span class="text-emerald-500 opacity-0 group-hover:opacity-100 transition">⬇️ ดาวน์โหลด</span></button>
+                            <button onclick="exportToCSV('stock_transactions')" class="w-full bg-slate-50 border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-bold p-5 rounded-2xl transition flex items-center justify-between group"><div class="flex items-center gap-4"><span class="text-3xl">📝</span> <span>ดาวน์โหลดประวัติรับ-จ่าย (CSV)</span></div><span class="text-blue-500 opacity-0 group-hover:opacity-100 transition">⬇️ ดาวน์โหลด</span></button>
+                            <button onclick="backupAllDataJSON()" class="w-full bg-moph-dark text-white font-bold p-5 rounded-2xl shadow-lg hover:bg-slate-800 transition flex items-center justify-between mt-8"><div class="flex items-center gap-4"><span class="text-3xl">📦</span> <span>ดาวน์โหลดไฟล์สำรองระบบทั้งหมด (JSON File)</span></div><span>⬇️ ดาวน์โหลด</span></button>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </main>
     </div>
 
-    <!-- ==================== Modal การแจ้งเตือน ==================== -->
-    <div id="noti-modal" class="fixed inset-0 bg-slate-900/70 hidden items-center justify-center z-50 p-4 no-print backdrop-blur-sm"><div class="bg-white p-8 rounded-[40px] w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]"><div class="flex justify-between items-center border-b pb-4 mb-4"><h3 class="text-2xl font-bold text-moph-dark">🔔 รายการแจ้งเตือน</h3><button onclick="closeNotiModal()" class="text-slate-400 hover:text-rose-500 text-3xl font-bold">&times;</button></div><div id="noti-content" class="overflow-y-auto flex-1 pr-2"></div><div class="mt-6 pt-4 border-t text-center"><button onclick="closeNotiModal()" class="bg-slate-100 text-slate-700 font-bold py-3 px-8 rounded-xl w-full">รับทราบ & ปิดหน้าต่าง</button></div></div></div>
+    <!-- ==================== Modal การแจ้งเตือน (Notifications) ==================== -->
+    <div id="noti-modal" class="fixed inset-0 bg-slate-900/70 hidden items-center justify-center z-50 p-4 no-print backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[40px] w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center border-b pb-4 mb-4"><h3 class="text-2xl font-bold text-moph-dark">🔔 รายการแจ้งเตือน</h3><button onclick="closeNotiModal()" class="text-slate-400 hover:text-rose-500 text-3xl font-bold leading-none">&times;</button></div>
+            <div id="noti-content" class="overflow-y-auto flex-1 pr-2"></div>
+            <div class="mt-6 pt-4 border-t text-center"><button onclick="closeNotiModal()" class="bg-slate-100 text-slate-700 font-bold py-3 px-8 rounded-xl hover:bg-slate-200 transition text-lg w-full">รับทราบ & ปิดหน้าต่าง</button></div>
+        </div>
+    </div>
 
     <!-- ==================== Modal จัดการรายการยา (CRUD) ==================== -->
     <div id="med-modal" class="fixed inset-0 bg-slate-900/70 hidden items-center justify-center z-50 p-4 no-print backdrop-blur-sm">
@@ -284,29 +480,20 @@
             <form id="med-form" onsubmit="saveMedicine(event)" class="space-y-5 text-sm font-bold text-slate-700">
                 <input type="hidden" id="edit-med-id">
                 <div><label class="block mb-2">ชื่อรายการเวชภัณฑ์</label><input type="text" id="med-name" required class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green" placeholder="ระบุชื่อยา"></div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label class="block mb-2">รูปแบบ (หมวดหมู่)</label>
-                        <select id="med-cat" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green bg-slate-50">
-                            <option value="tablet">tablet</option><option value="capsule">capsule</option><option value="mixture">mixture</option><option value="suspension">suspension</option><option value="cream">cream</option><option value="solution">solution</option><option value="sterile sol">sterile sol</option><option value="pack">pack</option><option value="ม้วน">ม้วน</option><option value="อื่นๆ">อื่นๆ</option>
-                        </select>
+                        <select id="med-cat" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green bg-slate-50"><option value="tablet">tablet</option><option value="capsule">capsule</option><option value="mixture">mixture</option><option value="suspension">suspension</option><option value="cream">cream</option><option value="spirit">spirit</option><option value="ear drop">ear drop</option><option value="eye drop">eye drop</option><option value="solution">solution</option><option value="sterile sol">sterile sol</option><option value="Syr.">Syr.</option><option value="pack">pack</option><option value="ม้วน">ม้วน</option><option value="อื่นๆ">อื่นๆ</option></select>
                     </div>
                     <div>
                         <label class="block mb-2 text-moph-dark">ขนาดบรรจุ (Package)</label>
-                        <select id="med-package" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green font-bold text-moph-green bg-emerald-50">
-                            <option value="1x1">1x1</option><option value="1x10">1x10</option><option value="1x25">1x25</option><option value="1x50">1x50</option><option value="1x100">1x100</option><option value="1x250">1x250</option><option value="1x300">1x300</option><option value="1x500">1x500</option><option value="1x1000">1x1000</option>
-                        </select>
+                        <select id="med-package" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green font-bold text-moph-green bg-emerald-50"><option value="1x1">1x1</option><option value="1x10">1x10</option><option value="1x25">1x25</option><option value="1x50">1x50</option><option value="1x100">1x100</option><option value="1x250">1x250</option><option value="1x300">1x300</option><option value="1x500">1x500</option><option value="1x1000">1x1000</option></select>
                     </div>
                     <div><label class="block mb-2">หน่วยนับย่อย (เช่น แผง, เม็ด, ขวด)</label><input type="text" id="med-unit" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green" placeholder="เช่น แผง"></div>
                     <div><label class="block mb-2">ราคา/หน่วยย่อย (บาท)</label><input type="number" id="med-price" step="0.01" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-moph-green"></div>
                     <div class="md:col-span-2"><label class="block mb-2">จุดสั่งซื้อ (Min Stock - นับตามหน่วยย่อย)</label><input type="number" id="med-min" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-rose-500 text-rose-600 bg-rose-50"></div>
                 </div>
-                
-                <div class="flex gap-4 mt-10">
-                    <button type="submit" class="flex-1 bg-moph-green text-white font-bold py-5 rounded-2xl shadow-xl hover:bg-moph-dark transition text-lg">บันทึกข้อมูล</button>
-                    <button type="button" onclick="closeMedModal()" class="flex-1 py-5 text-slate-400 font-bold hover:bg-slate-100 rounded-2xl transition text-lg">ยกเลิก</button>
-                </div>
+                <div class="flex gap-4 mt-10"><button type="submit" class="flex-1 bg-moph-green text-white font-bold py-5 rounded-2xl shadow-xl hover:bg-moph-dark transition text-lg">บันทึกข้อมูล</button><button type="button" onclick="closeMedModal()" class="flex-1 py-5 text-slate-400 font-bold hover:bg-slate-100 rounded-2xl transition text-lg">ยกเลิก</button></div>
             </form>
         </div>
     </div>
@@ -317,141 +504,260 @@
         const supabaseKey = 'sb_publishable_Q7Jcj5NkMeCtdtGcdRrLdA_4eeY9Ad_';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        let gMeds = []; let gTrans = []; let gPersonnel = []; let currentUserRole = ''; let currentUserFullname = '';
+        let gMeds = []; let gTrans = []; let gPersonnel = []; let trendChartInstance = null; let currentUserRole = ''; let currentUserFullname = '';
+        const thaiMonths = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+
+        function initGlobalFiscalYear() {
+            const startYear = 2026; let opts = ''; const d = new Date(); const y = d.getFullYear(); const currentFy = d.getMonth() >= 9 ? y + 1 : y; 
+            for(let i = startYear; i <= startYear + 5; i++) { const selected = (i === currentFy || (currentFy < startYear && i === startYear)) ? 'selected' : ''; opts += `<option value="${i}" ${selected}>ปีงบประมาณ ${i+543}</option>`; }
+            if(document.getElementById('global-fy')) document.getElementById('global-fy').innerHTML = opts;
+        }
 
         function syncFiscalYear() {
             const selectedFy = document.getElementById('global-fy').value;
-            ['stock-card-fy', 'comm-year'].forEach(id => { const el = document.getElementById(id); if(el) { el.innerHTML = document.getElementById('global-fy').innerHTML; el.value = selectedFy; } });
+            if(document.getElementById('in-fy-display')) document.getElementById('in-fy-display').value = `ปีงบประมาณ ${parseInt(selectedFy)+543}`;
+            if(document.getElementById('out-fy-display')) document.getElementById('out-fy-display').value = `ปีงบประมาณ ${parseInt(selectedFy)+543}`;
+            ['stock-card-fy', 'annual-year-select', 'comm-year'].forEach(id => { const el = document.getElementById(id); if(el) { el.innerHTML = document.getElementById('global-fy').innerHTML; el.value = selectedFy; } });
             if(!document.getElementById('page-stock-card').classList.contains('hidden')) loadStockCard();
+            if(!document.getElementById('page-report-annual').classList.contains('hidden')) generateAnnualReport();
         }
 
+        function updatePrintLabel(id, value) { const el = document.getElementById(id); if(el) el.innerHTML = value ? value : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'; }
+        function updateDateLabel(id, dateValue) { const d = new Date(dateValue); const formatted = isNaN(d) ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }); document.querySelectorAll('.lbl-req-date').forEach(el => el.innerHTML = formatted); const mainLabel = document.getElementById(id); if (mainLabel) mainLabel.innerHTML = formatted; }
+        function setInitialDate() { const today = new Date(); const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; if(document.getElementById('input-req-date')) { document.getElementById('input-req-date').value = todayStr; updateDateLabel('lbl-req-date', todayStr); } }
+        function applySettingsToUI(s) { document.querySelectorAll('.dyn-hosp-name').forEach(el => el.innerText = s.hospName); updatePrintLabel('lbl-requester', s.reqName); updatePrintLabel('lbl-director', s.dirName); updatePrintLabel('lbl-manager', s.mgrName); updatePrintLabel('lbl-hosp-director', s.hospDirName || 'นายมงคล ลือชูวงศ์'); }
+        
+        function loadSettings() {
+            const s = JSON.parse(localStorage.getItem('tcn_settings')) || { hospName: 'โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านท่าฉนวน', dirName: '', reqName: '', mgrName: '', hospDirName: 'นายมงคล ลือชูวงศ์' };
+            document.getElementById('set-hosp').value = s.hospName; document.getElementById('set-dir').value = s.dirName; document.getElementById('set-req').value = s.reqName; document.getElementById('set-mgr').value = s.mgrName; if(document.getElementById('set-hosp-dir')) document.getElementById('set-hosp-dir').value = s.hospDirName || 'นายมงคล ลือชูวงศ์';
+            applySettingsToUI(s); initGlobalFiscalYear(); syncFiscalYear();
+        }
+
+        function saveSettings(e) { e.preventDefault(); const s = { hospName: document.getElementById('set-hosp').value, dirName: document.getElementById('set-dir').value, reqName: document.getElementById('set-req').value, mgrName: document.getElementById('set-mgr').value, hospDirName: document.getElementById('set-hosp-dir') ? document.getElementById('set-hosp-dir').value : 'นายมงคล ลือชูวงศ์' }; localStorage.setItem('tcn_settings', JSON.stringify(s)); applySettingsToUI(s); alert("บันทึกการตั้งค่าระบบเรียบร้อยแล้ว!"); }
+
+        function loadPersonnel() { gPersonnel = JSON.parse(localStorage.getItem('tcn_personnel')) || []; renderPersonnel(); }
+        function renderPersonnel() {
+            const tbody = document.getElementById('users-table'); if(!tbody) return;
+            if(gPersonnel.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-slate-400 italic">ยังไม่มีข้อมูลบุคลากร</td></tr>'; return; }
+            tbody.innerHTML = gPersonnel.map(u => `<tr class="hover:bg-slate-50 transition border-b"><td class="p-4 font-bold text-moph-dark">${u.username}</td><td class="p-4">${u.fullname}</td><td class="p-4 text-slate-500">${u.position}<br><span class="text-[10px] ${u.role==='admin'?'text-moph-green font-bold':'text-slate-400'}">${u.role==='admin'?'[ จัดการได้ทุกเมนู ]':'[ ดูได้อย่างเดียว ]'}</span></td><td class="p-4 text-center"><button onclick="editPersonnel('${u.id}')" class="text-blue-500 font-bold mr-3 hover:underline">แก้ไข</button><button onclick="deletePersonnel('${u.id}')" class="text-rose-500 font-bold hover:underline">ลบ</button></td></tr>`).join('');
+        }
+        function savePersonnel(e) { e.preventDefault(); const id = document.getElementById('edit-user-id').value || Date.now().toString(); const username = document.getElementById('user-username').value; if(username.toLowerCase() === 'admin') { alert('ไม่สามารถใช้ชื่อ admin ได้'); return; } const exists = gPersonnel.find(u => u.username === username && u.id !== id); if(exists) { alert('Username นี้มีในระบบแล้ว'); return; } const user = { id: id, username: username, password: document.getElementById('user-password').value, fullname: document.getElementById('user-fullname').value, position: document.getElementById('user-position').value, role: document.getElementById('user-role').value }; const idx = gPersonnel.findIndex(u => u.id === id); if(idx >= 0) gPersonnel[idx] = user; else gPersonnel.push(user); localStorage.setItem('tcn_personnel', JSON.stringify(gPersonnel)); resetUserForm(); loadPersonnel(); alert('บันทึกข้อมูลบุคลากรสำเร็จ!'); }
+        function editPersonnel(id) { const u = gPersonnel.find(x => x.id === id); if(u) { document.getElementById('edit-user-id').value = u.id; document.getElementById('user-username').value = u.username; document.getElementById('user-password').value = u.password; document.getElementById('user-fullname').value = u.fullname; document.getElementById('user-position').value = u.position; document.getElementById('user-role').value = u.role || 'user'; } }
+        function deletePersonnel(id) { if(confirm('ต้องการลบผู้ใช้งานนี้ใช่หรือไม่?')) { gPersonnel = gPersonnel.filter(x => x.id !== id); localStorage.setItem('tcn_personnel', JSON.stringify(gPersonnel)); loadPersonnel(); } }
+        function resetUserForm() { document.getElementById('user-form').reset(); document.getElementById('edit-user-id').value = ''; }
+
+        function checkNotifications() {
+            if (!gMeds || !gTrans) return 0;
+            const lowStock = gMeds.filter(m => m.stock_balance <= (m.min_stock || 0));
+            const today = new Date(); const ninetyDaysFromNow = new Date(); ninetyDaysFromNow.setDate(today.getDate() + 90);
+            const expiredOrExpiring = gTrans.filter(t => { if (t.transaction_type !== 'IN' || !t.expiry_date) return false; const expDate = new Date(t.expiry_date); return expDate <= ninetyDaysFromNow; });
+            const activeExpiring = expiredOrExpiring.filter(t => { const med = gMeds.find(m => String(m.id) === String(t.medicine_id)); return med && med.stock_balance > 0; });
+            const uniqueExpiring = []; const seenExp = new Set(); activeExpiring.forEach(t => { const key = `${t.medicine_id}_${t.lot_no}_${t.expiry_date}`; if (!seenExp.has(key)) { seenExp.add(key); uniqueExpiring.push(t); } });
+            const totalAlerts = lowStock.length + uniqueExpiring.length;
+            const badge = document.getElementById('noti-badge'); if (badge) { badge.innerText = totalAlerts; badge.style.display = totalAlerts > 0 ? 'flex' : 'none'; }
+            let html = '';
+            if (totalAlerts === 0) { html = '<div class="flex flex-col items-center justify-center py-12 text-slate-400"><span class="text-6xl mb-4">✅</span><p class="font-bold text-xl">ไม่มีรายการแจ้งเตือน</p><p>สถานะคลังเวชภัณฑ์ปกติ</p></div>'; } 
+            else {
+                if (lowStock.length > 0) { html += `<h4 class="font-bold text-rose-600 mb-3 mt-2 text-lg flex items-center gap-2"><span>🔴</span> ยาใกล้หมดสต๊อก (${lowStock.length} รายการ)</h4><ul class="space-y-2 text-sm mb-6">`; lowStock.forEach(m => { html += `<li class="bg-rose-50 p-4 rounded-xl border border-rose-100 flex justify-between items-center gap-2"><span class="font-bold text-slate-700">${m.name}</span><span class="font-black text-rose-600 bg-white px-3 py-1 rounded-lg border border-rose-200">เหลือ ${m.stock_balance} ${m.unit} (Min: ${m.min_stock})</span></li>`; }); html += `</ul>`; }
+                if (uniqueExpiring.length > 0) { html += `<h4 class="font-bold text-orange-600 mb-3 mt-4 text-lg flex items-center gap-2"><span>⏳</span> ยาใกล้/หมดอายุ ภายใน 90 วัน (${uniqueExpiring.length} รายการ)</h4><ul class="space-y-2 text-sm">`; uniqueExpiring.forEach(t => { const med = gMeds.find(m => String(m.id) === String(t.medicine_id)); const expStr = new Date(t.expiry_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }); const isExpired = new Date(t.expiry_date) < today; html += `<li class="bg-orange-50 p-4 rounded-xl border border-orange-100 flex justify-between items-center gap-2"><span class="font-bold text-slate-700">${med ? med.name : 'ไม่ทราบชื่อยา'} <span class="text-slate-500 font-normal">(Lot: ${t.lot_no || '-'})</span></span><span class="font-black ${isExpired ? 'text-rose-600 bg-rose-100 border-rose-200' : 'text-orange-600 bg-white border-orange-200'} px-3 py-1 rounded-lg border">${isExpired ? 'หมดอายุแล้ว!' : `EXP: ${expStr}`}</span></li>`; }); html += `</ul>`; }
+            }
+            document.getElementById('noti-content').innerHTML = html; return totalAlerts;
+        }
+
+        function showNotiModal() { document.getElementById('noti-modal').classList.replace('hidden', 'flex'); }
+        function closeNotiModal() { document.getElementById('noti-modal').classList.replace('flex', 'hidden'); }
+
         async function handleLogin(e) {
-            e.preventDefault(); const u = document.getElementById('login-username').value; const p = document.getElementById('login-password').value;
+            e.preventDefault(); const u = document.getElementById('login-username').value; const p = document.getElementById('login-password').value; const savedUsers = JSON.parse(localStorage.getItem('tcn_personnel')) || [];
             if (u === 'admin' && p === '1234') { currentUserRole = 'admin'; currentUserFullname = 'Super Admin'; await enterApp(); } 
-            else { alert('Username ไม่ถูกต้องสำหรับการทดสอบ'); }
+            else { const found = savedUsers.find(x => x.username === u && x.password === p); if (found) { currentUserRole = found.role || 'user'; currentUserFullname = found.fullname || u; await enterApp(); } else { alert('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง!'); } }
         }
 
         async function enterApp() {
             document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('display-username').innerText = `👤 ${currentUserFullname}`;
-            
-            const d = new Date(); let opts = ''; const cy = d.getFullYear(); const currentFy = d.getMonth() >= 9 ? cy + 1 : cy;
-            for(let i = 2025; i <= 2030; i++) opts += `<option value="${i}" ${i===currentFy?'selected':''}>ปีงบประมาณ ${i+543}</option>`;
-            document.getElementById('global-fy').innerHTML = opts; syncFiscalYear();
-            
-            await loadData(); showPage('dashboard');
+            document.getElementById('display-username').innerText = `👤 ${currentUserFullname} (${currentUserRole.toUpperCase()})`;
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = currentUserRole === 'admin' ? '' : 'none');
+            loadSettings(); loadPersonnel(); setInitialDate(); await loadData(); showPage('dashboard');
+            const alertsCount = checkNotifications(); if (alertsCount > 0) showNotiModal();
         }
+
+        function logout() { location.reload(); }
 
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-            document.getElementById('page-' + pageId).classList.remove('hidden');
-            document.getElementById('btn-' + pageId).classList.add('active-nav');
+            const target = document.getElementById('page-' + pageId); if(target) target.classList.remove('hidden');
+            const btn = document.getElementById('btn-' + pageId); if(btn) btn.classList.add('active-nav');
+            if(pageId === 'dashboard') renderDashboard();
+            if(pageId === 'report-annual') generateAnnualReport();
             if(pageId === 'report-lowstock') generateLowStockReport();
+            if(pageId === 'report-expiry') generateExpiryReport();
+            if(pageId === 'stock-card') loadStockCard();
+            if(['add-med', 'stock-in', 'stock-out'].includes(pageId)) loadData();
         }
 
         async function loadData() {
             try {
                 const { data: meds } = await supabaseClient.from('medicines').select('*').order('name');
-                const { data: trans } = await supabaseClient.from('stock_transactions').select('*');
+                const { data: trans } = await supabaseClient.from('stock_transactions').select('*').order('doc_date', { ascending: false }).order('created_at', { ascending: false });
                 gMeds = meds || []; gTrans = trans || [];
-                renderInventory(); renderMedList(); setupDropdowns();
+                renderInventory(); renderMedList(); setupDropdowns(); checkNotifications();
+                const dashPage = document.getElementById('page-dashboard'); if (dashPage && !dashPage.classList.contains('hidden')) renderDashboard();
+                const scPage = document.getElementById('page-stock-card'); if (scPage && !scPage.classList.contains('hidden')) loadStockCard();
             } catch (err) { console.error("Data load error:", err); }
         }
 
         function renderInventory() {
-            document.getElementById('inventory-table').innerHTML = gMeds.map((m, i) => `
-                <tr class="hover:bg-slate-50 border-b">
-                    <td class="p-5 font-mono text-slate-400">${i+1}</td>
-                    <td class="p-5 font-bold text-slate-400 uppercase">${m.category}</td>
-                    <td class="p-5 font-bold text-slate-800">${m.name}</td>
-                    <td class="p-5 text-right font-black ${m.stock_balance <= (m.min_stock||0) ? 'text-rose-600' : 'text-moph-green'} text-xl">${m.stock_balance.toLocaleString()}</td>
-                    <td class="p-5 text-center font-bold text-slate-500">${m.unit} <br><span class="text-[11px] text-moph-green bg-emerald-50 px-2 py-1 rounded-md">บรรจุ ${m.package_size || '1x1'}</span></td>
-                </tr>`).join('');
+            const table = document.getElementById('inventory-table');
+            if(table) {
+                table.innerHTML = gMeds.map((m, i) => `<tr class="hover:bg-slate-50 transition border-b"><td class="p-5 font-mono text-slate-400">${i+1}</td><td class="p-5 font-bold text-slate-400 uppercase">${m.category}</td><td class="p-5 font-bold text-slate-800">${m.name}</td><td class="p-5 text-right font-black ${m.stock_balance <= (m.min_stock||0) ? 'text-rose-600' : 'text-moph-green'} text-xl">${m.stock_balance.toLocaleString()}</td><td class="p-5 text-center font-bold text-slate-500">${m.unit} <br><span class="text-[11px] text-moph-green bg-emerald-50 px-2 py-1 rounded-md">บรรจุ ${m.package_size || '1x1'}</span></td></tr>`).join('');
+            }
         }
 
         function renderMedList() {
-            document.getElementById('med-list-grid').innerHTML = gMeds.map(m => `
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 group">
-                    <div class="text-[10px] font-black text-slate-300 uppercase">${m.category}</div>
-                    <div class="font-bold text-slate-800 text-lg my-2 h-14 overflow-hidden">${m.name}</div>
-                    <div class="text-[11px] text-moph-dark font-bold bg-emerald-50 inline-block px-2 py-1 rounded-md mb-2">บรรจุ: ${m.package_size || '1x1'}</div>
-                    <div class="flex justify-between items-end mt-2 pt-4 border-t border-slate-50">
-                        <div><div class="text-[10px] text-slate-400 font-bold">คงเหลือ (${m.unit})</div><div class="text-2xl font-black text-moph-green">${m.stock_balance}</div></div>
-                        <button onclick='openMedModal(${JSON.stringify(m)})' class="text-moph-green font-black text-xs hover:underline bg-emerald-50 px-3 py-2 rounded-lg">แก้ไข</button>
-                    </div>
-                </div>`).join('');
+            const grid = document.getElementById('med-list-grid');
+            if(grid) {
+                grid.innerHTML = gMeds.map(m => `<div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 group transition hover:shadow-xl"><div class="text-[10px] font-black text-slate-300 uppercase tracking-widest">${m.category}</div><div class="font-bold text-slate-800 text-lg my-2 h-14 overflow-hidden">${m.name}</div><div class="text-[11px] text-moph-dark font-bold bg-emerald-50 inline-block px-2 py-1 rounded-md mb-2">บรรจุ: ${m.package_size || '1x1'}</div><div class="flex justify-between items-end mt-2 pt-4 border-t border-slate-50"><div><div class="text-[10px] text-slate-400 font-bold uppercase">คงเหลือ (${m.unit})</div><div class="text-2xl font-black text-moph-green">${m.stock_balance}</div></div><button onclick='openMedModal(${JSON.stringify(m)})' class="text-moph-green font-black text-xs hover:underline bg-emerald-50 px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition">แก้ไข</button></div></div>`).join('');
+            }
         }
 
         function setupDropdowns() {
-            const opts = '<option value="">-- เลือกรายการยา --</option>' + gMeds.map(m => `<option value="${m.id}">${m.name} [บรรจุ: ${m.package_size || '1x1'}] (${m.unit})</option>`).join('');
-            if(document.getElementById('in-med-id')) document.getElementById('in-med-id').innerHTML = opts;
-            if(document.getElementById('out-med-id')) document.getElementById('out-med-id').innerHTML = opts;
+            const sortedMeds = [...gMeds].sort((a, b) => a.name.localeCompare(b.name, 'th'));
+
+            // Dropdown สำหรับรับเข้า และ Stock Card (แสดงชื่อยา + ขนาดบรรจุ + หน่วยนับ)
+            const inOpts = '<option value="">-- เลือกรายการเวชภัณฑ์ --</option>' + sortedMeds.map(m => `<option value="${m.id}">${m.name} [บรรจุ: ${m.package_size || '1x1'}] (${m.unit})</option>`).join('');
+            if(document.getElementById('in-med-id')) document.getElementById('in-med-id').innerHTML = inOpts;
+            if(document.getElementById('stock-card-med-id')) { const cv = document.getElementById('stock-card-med-id').value; document.getElementById('stock-card-med-id').innerHTML = inOpts; if(cv) document.getElementById('stock-card-med-id').value = cv; }
+
+            // Dropdown สำหรับจ่ายออก FEFO (แสดงชื่อยา + ขนาดบรรจุ + วันหมดอายุใกล้สุด)
+            if(document.getElementById('out-med-id')) {
+                const fefoOpts = '<option value="">-- เลือกยา (เรียงตามตัวอักษร + FEFO) --</option>' + sortedMeds.map(m => {
+                    const lot = gTrans.filter(t => String(t.medicine_id) === String(m.id) && t.transaction_type === 'IN' && t.expiry_date).sort((a,b) => new Date(a.expiry_date) - new Date(b.expiry_date))[0];
+                    const exp = lot?.expiry_date || '9999-12-31';
+                    const expStr = exp === '9999-12-31' ? 'ไม่ระบุ' : new Date(exp).toLocaleDateString('th-TH');
+                    return `<option value="${m.id}">${m.name} [บรรจุ: ${m.package_size || '1x1'}] [EXP: ${expStr}] (${m.unit})</option>`;
+                }).join('');
+                document.getElementById('out-med-id').innerHTML = fefoOpts;
+            }
+        }
+
+        function renderDashboard() {
+            if(!gMeds || gMeds.length === 0) return;
+            const tStock = gMeds.reduce((s, m) => s + (m.stock_balance * (m.price || 0)), 0); let tIn = 0, tOut = 0; const medMap = {}; gMeds.forEach(m => medMap[String(m.id)] = m);
+            gTrans.forEach(t => { const p = medMap[String(t.medicine_id)]?.price || 0; if(t.transaction_type === 'IN') tIn += (t.quantity * p); if(t.transaction_type === 'OUT') tOut += (t.quantity * p); });
+            document.getElementById('dash-total-stock').innerText = tStock.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' ฿'; document.getElementById('dash-total-in').innerText = tIn.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' ฿'; document.getElementById('dash-total-out').innerText = tOut.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' ฿';
+            const mSet = new Set(gTrans.map(t => (t.doc_date || t.created_at).substring(0, 7))); let mArr = Array.from(mSet).sort().reverse(); const currYm = new Date().toISOString().substring(0, 7); if(!mArr.includes(currYm)) mArr.unshift(currYm);
+            const mSel = document.getElementById('dash-month-select'); const selVal = mSel.value; mSel.innerHTML = mArr.map(m => `<option value="${m}">${thaiMonths[parseInt(m.split('-')[1])-1]} ${parseInt(m.split('-')[0])+543}</option>`).join(''); mSel.value = (selVal && mArr.includes(selVal)) ? selVal : currYm; updateMonthlyDash();
+            const l6 = mArr.slice(0, 6).reverse(); const cData = l6.map(m => gTrans.filter(t => t.transaction_type === 'OUT' && (t.doc_date||t.created_at).startsWith(m)).reduce((s, t) => s + (t.quantity * (medMap[String(t.medicine_id)]?.price || 0)), 0));
+            if(trendChartInstance) trendChartInstance.destroy();
+            trendChartInstance = new Chart(document.getElementById('trendChart').getContext('2d'), { type: 'line', data: { labels: l6.map(m => thaiMonths[parseInt(m.split('-')[1])-1]), datasets: [{ label: 'มูลค่าการเบิกจ่าย (฿)', data: cData, borderColor: '#007d69', backgroundColor: 'rgba(0, 125, 105, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+            const uMap = {}; gTrans.filter(t=>t.transaction_type==='OUT').forEach(t=>{ const sid = String(t.medicine_id); uMap[sid] = (uMap[sid]||0) + (t.quantity * (medMap[sid]?.price||0)); });
+            const top5 = Object.keys(uMap).map(id => ({ name: medMap[id]?.name, val: uMap[id] })).sort((a,b)=>b.val-a.val).slice(0,5); document.getElementById('dash-top5-list').innerHTML = top5.length ? top5.map((item, i) => `<li class="flex justify-between p-3 bg-slate-50 rounded-xl"><span><span class="text-moph-green font-bold mr-2">#${i+1}</span> ${item.name}</span><b class="text-rose-500">${item.val.toLocaleString()} ฿</b></li>`).join('') : '<li class="text-slate-400 italic">ไม่มีข้อมูล</li>';
+            const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 3); const lTransMap = {}; gTrans.forEach(t=>{ const d = new Date(t.doc_date||t.created_at); const sid = String(t.medicine_id); if(!lTransMap[sid] || d > lTransMap[sid]) lTransMap[sid] = d; });
+            const dStock = gMeds.filter(m => m.stock_balance > 0 && (!lTransMap[String(m.id)] || lTransMap[String(m.id)] < cutoff)); document.getElementById('dash-inactive-list').innerHTML = dStock.length ? dStock.map(m => `<tr><td class="p-2">${m.name}</td><td class="text-center">${m.stock_balance}</td><td class="text-right font-bold text-rose-500">${(m.stock_balance*(m.price||0)).toLocaleString()}</td></tr>`).join('') : '<tr><td colspan="3" class="p-4 text-center text-emerald-500 font-bold">สต๊อกไหลเวียนดีมาก</td></tr>';
+        }
+
+        function updateMonthlyDash() {
+            const m = document.getElementById('dash-month-select').value; if(!m) return; const medMap = {}; gMeds.forEach(med => medMap[String(med.id)] = med);
+            const mi = gTrans.filter(t => t.transaction_type==='IN' && (t.doc_date||t.created_at).startsWith(m)).reduce((s,t) => s + (t.quantity * (medMap[String(t.medicine_id)]?.price||0)), 0);
+            const mo = gTrans.filter(t => t.transaction_type==='OUT' && (t.doc_date||t.created_at).startsWith(m)).reduce((s,t) => s + (t.quantity * (medMap[String(t.medicine_id)]?.price||0)), 0);
+            document.getElementById('dash-month-in').innerText = mi.toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿'; document.getElementById('dash-month-out').innerText = mo.toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿';
         }
 
         function openMedModal(med = null) {
-            if(med) { 
-                document.getElementById('edit-med-id').value = med.id; 
-                document.getElementById('med-name').value = med.name; 
-                document.getElementById('med-cat').value = med.category; 
-                document.getElementById('med-unit').value = med.unit; 
-                document.getElementById('med-price').value = med.price; 
-                document.getElementById('med-min').value = med.min_stock; 
-                document.getElementById('med-package').value = med.package_size || '1x1'; // อัปเดตขนาดบรรจุตอนแก้ไข
-            } else { 
-                document.getElementById('med-form').reset(); 
-                document.getElementById('edit-med-id').value = ""; 
-                document.getElementById('med-package').value = "1x1"; // ค่าเริ่มต้นตอนเพิ่มใหม่
-            }
+            if(med) { document.getElementById('edit-med-id').value = med.id; document.getElementById('med-name').value = med.name; document.getElementById('med-cat').value = med.category; document.getElementById('med-unit').value = med.unit; document.getElementById('med-price').value = med.price; document.getElementById('med-min').value = med.min_stock; document.getElementById('med-package').value = med.package_size || '1x1'; }
+            else { document.getElementById('med-form').reset(); document.getElementById('edit-med-id').value = ""; document.getElementById('med-package').value = "1x1"; }
             document.getElementById('med-modal').classList.replace('hidden', 'flex');
         }
 
-        function closeMedModal() { document.getElementById('med-modal').classList.replace('flex', 'hidden'); }
-
         async function saveMedicine(e) {
             e.preventDefault(); const id = document.getElementById('edit-med-id').value;
-            const p = { 
-                name: document.getElementById('med-name').value, 
-                category: document.getElementById('med-cat').value, 
-                unit: document.getElementById('med-unit').value, 
-                price: parseFloat(document.getElementById('med-price').value)||0, 
-                min_stock: parseInt(document.getElementById('med-min').value)||0,
-                package_size: document.getElementById('med-package').value // บันทึกขนาดบรรจุลงฐานข้อมูล
-            };
-            try {
-                if(id) await supabaseClient.from('medicines').update(p).eq('id', id); else await supabaseClient.from('medicines').insert([{...p, stock_balance: 0}]);
-                closeMedModal(); loadData(); alert("บันทึกข้อมูลเรียบร้อย");
-            } catch(err) { alert("Error: "+err.message); }
+            const p = { name: document.getElementById('med-name').value, category: document.getElementById('med-cat').value, unit: document.getElementById('med-unit').value, price: parseFloat(document.getElementById('med-price').value)||0, min_stock: parseInt(document.getElementById('med-min').value)||0, package_size: document.getElementById('med-package').value };
+            try { if(id) await supabaseClient.from('medicines').update(p).eq('id', id); else await supabaseClient.from('medicines').insert([{...p, stock_balance: 0}]); closeMedModal(); loadData(); alert("บันทึกข้อมูลเรียบร้อย"); } catch(err) { alert("Error: "+err.message); }
+        }
+
+        async function handleTransaction(e, type) {
+            e.preventDefault(); const prefix = type === 'IN' ? 'in-' : 'out-'; const medId = document.getElementById(prefix + 'med-id').value; const qty = parseFloat(document.getElementById(prefix + 'qty').value); const docNo = document.getElementById(prefix + 'doc').value.trim(); const docDate = document.getElementById(prefix + 'date').value; const fy = parseInt(document.getElementById('global-fy').value);
+            const med = gMeds.find(m => String(m.id) === String(medId)); if(!med) { alert("ไม่พบข้อมูลยาในระบบ"); return; }
+            const isDuplicate = gTrans.some(t => String(t.medicine_id) === String(medId) && t.transaction_type === type && t.doc_no === docNo); if(isDuplicate) { alert(`⚠️ ตรวจพบข้อมูลซ้ำ!\nมีรายการยา "${med.name}" ในเอกสารเลขที่ "${docNo}" แล้ว`); return; }
+            const startFY = `${fy-1}-10-01`; const endFY = `${fy}-09-30`; if (docDate < startFY || docDate > endFY) { alert(`⚠️ วันที่ทำรายการไม่ถูกต้อง! กรุณาระบุวันที่ในปีงบประมาณ ${fy+543}`); return; }
+            if(type === 'OUT' && qty > med.stock_balance) { alert("ยอดคงเหลือไม่เพียงพอ!"); return; }
+            const p = { medicine_id: medId, transaction_type: type, quantity: qty, doc_date: docDate, doc_no: docNo, source_destination: type === 'IN' ? document.getElementById('in-source').value : document.getElementById('out-dest').value, performed_by: currentUserFullname };
+            if(type === 'IN') { p.expiry_date = document.getElementById('in-exp').value; p.lot_no = document.getElementById('in-lot').value; }
+            try { await supabaseClient.from('stock_transactions').insert([p]); await supabaseClient.from('medicines').update({ stock_balance: type === 'IN' ? med.stock_balance + qty : med.stock_balance - qty }).eq('id', medId); alert("บันทึกรายการสำเร็จ!"); e.target.reset(); document.getElementById(prefix + 'date').value = docDate; loadData(); } catch(err) { alert("Error: "+err.message); }
+        }
+
+        async function loadStockCard() {
+            const medId = document.getElementById('stock-card-med-id').value; const fy = parseInt(document.getElementById('global-fy').value); const body = document.getElementById('stock-card-body');
+            if(!medId) { document.getElementById('sc-name').innerText = '-'; document.getElementById('sc-category').innerText = '-'; document.getElementById('sc-unit').innerText = '-'; document.getElementById('sc-price').innerText = '-'; body.innerHTML = '<tr><td colspan="8" class="p-10 text-slate-400 italic text-center">-- กรุณาเลือกรายการยาที่ต้องการตรวจสอบ --</td></tr>'; return; }
+            const med = gMeds.find(m => String(m.id) === String(medId)); if(!med) return;
+            document.getElementById('sc-name').innerText = med.name; document.getElementById('sc-category').innerText = med.category; document.getElementById('sc-unit').innerText = `${med.unit} (บรรจุ: ${med.package_size || '1x1'})`; document.getElementById('sc-price').innerText = (med.price||0).toFixed(2) + ' ฿';
+            const { data: trans } = await supabaseClient.from('stock_transactions').select('*').eq('medicine_id', medId).order('doc_date', { ascending: true }).order('created_at', { ascending: true });
+            if(!trans || trans.length === 0) { body.innerHTML = '<tr><td colspan="8" class="p-10 text-slate-400 text-center">-- ไม่พบประวัติการทำรายการ --</td></tr>'; return; }
+            const startDate = `${fy-1}-10-01`; const endDate = `${fy}-09-30`; let bal = 0; let broughtForward = 0;
+            const pastTrans = trans.filter(t => t.doc_date < startDate); pastTrans.forEach(t => { broughtForward = t.transaction_type === 'IN' ? broughtForward + t.quantity : broughtForward - t.quantity; }); bal = broughtForward;
+            const currentTrans = trans.filter(t => t.doc_date >= startDate && t.doc_date <= endDate);
+            let html = `<tr class="bg-slate-50 text-black font-bold text-center"><td class="p-2 border border-red-700" colspan="4">ยอดยกมา (ก่อน 1 ต.ค. ${fy+542})</td><td class="p-2 border border-red-700 text-blue-600">${broughtForward}</td><td class="p-2 border border-red-700" colspan="3"></td></tr>`;
+            if (currentTrans.length === 0) { html += `<tr><td colspan="8" class="p-10 text-slate-400 text-center italic">-- ไม่พบประวัติการทำรายการในปีงบประมาณ ${fy+543} --</td></tr>`; } 
+            else { html += currentTrans.map(t => { bal = t.transaction_type === 'IN' ? bal + t.quantity : bal - t.quantity; return `<tr class="border border-red-700 text-black"><td class="p-2 border border-red-700">${new Date(t.doc_date).toLocaleDateString('th-TH')}</td><td class="p-2 border border-red-700 text-left">${t.doc_no||'-'} / ${t.source_destination||'-'}</td><td class="p-2 border border-red-700 font-bold text-emerald-600">${t.transaction_type==='IN'?t.quantity:'-'}</td><td class="p-2 border border-red-700 font-bold text-rose-600">${t.transaction_type==='OUT'?t.quantity:'-'}</td><td class="p-2 border border-red-700 font-black">${bal}</td><td class="p-2 border border-red-700 text-rose-500">${t.expiry_date?new Date(t.expiry_date).toLocaleDateString('th-TH'):'-'}</td><td class="p-2 border border-red-700 font-mono">${t.lot_no||'-'}</td><td class="p-2 border border-red-700 text-[10px] opacity-50">${t.performed_by || ''}</td></tr>`; }).join(''); }
+            body.innerHTML = html;
+        }
+
+        async function saveCommittee(e) { e.preventDefault(); const y = parseInt(document.getElementById('comm-year').value); const p = { fiscal_year: y, chairperson_name: document.getElementById('chair-name').value, chairperson_position: document.getElementById('chair-pos').value, member1_name: document.getElementById('m1-name').value, member1_position: document.getElementById('m1-pos').value, member2_name: document.getElementById('m2-name').value, member2_position: document.getElementById('m2-pos').value }; const { data: ex } = await supabaseClient.from('committees').select('id').eq('fiscal_year', y).single(); if(ex) await supabaseClient.from('committees').update(p).eq('id', ex.id); else await supabaseClient.from('committees').insert([p]); alert("บันทึกกรรมการสำเร็จ!"); e.target.reset(); }
+
+        async function generateAnnualReport() {
+            const yEnd = parseInt(document.getElementById('global-fy').value); const start = `${yEnd-1}-10-01`; const end = `${yEnd}-09-30`; document.getElementById('annual-report-title').innerText = `รายงานพัสดุ ประจำปีงบประมาณ 25${(yEnd+543).toString().substring(2)} (1 ต.ค. ${yEnd+542} - 30 ก.ย. ${yEnd+543})`;
+            const { data: allT } = await supabaseClient.from('stock_transactions').select('*');
+            document.getElementById('annual-report-table').innerHTML = gMeds.map((m, i) => {
+                const prev = allT.filter(t => String(t.medicine_id)===String(m.id) && t.doc_date < start).reduce((s,t)=>t.transaction_type==='IN'?s+t.quantity:s-t.quantity, 0);
+                const pT = allT.filter(t => String(t.medicine_id)===String(m.id) && t.doc_date >= start && t.doc_date <= end);
+                const tin = pT.filter(t=>t.transaction_type==='IN').reduce((s,t)=>s+t.quantity, 0); const tout = pT.filter(t=>t.transaction_type==='OUT').reduce((s,t)=>s+t.quantity, 0); const p = m.price || 0;
+                return `<tr class="text-[10px] text-black"><td class="border p-2">${i+1}</td><td class="border p-2 text-left font-bold">${m.name}</td><td class="border p-2">${m.unit} <br><span class="opacity-50">(${m.package_size || '1x1'})</span></td><td class="border p-2">${p.toFixed(2)}</td><td class="border p-2 text-rose-500">${prev}</td><td class="border p-2">${tin}</td><td class="border p-2">${(tin*p).toLocaleString()}</td><td class="border p-2 text-rose-500 font-bold">${tout}</td><td class="border p-2">${(tout*p).toLocaleString()}</td><td class="border p-2 bg-blue-50 font-black">${prev+tin-tout}</td><td class="border p-2 bg-blue-50 font-black">${((prev+tin-tout)*p).toLocaleString()}</td></tr>`;
+            }).join('');
+            const { data: c } = await supabaseClient.from('committees').select('*').eq('fiscal_year', yEnd).single();
+            document.getElementById('annual-report-signatures').innerHTML = c ? `<div class="grid grid-cols-3 gap-8 text-center mt-12 text-[12px] md:text-sm font-bold text-black"><div class="space-y-6"><p>ลงชื่อ......................................... (ประธาน)</p><p>(${c.chairperson_name})</p><p>${c.chairperson_position}</p></div><div class="space-y-6"><p>ลงชื่อ......................................... กรรมการ</p><p>(${c.member1_name})</p><p>${c.member1_position}</p></div><div class="space-y-6"><p>ลงชื่อ......................................... กรรมการ</p><p>(${c.member2_name})</p><p>${c.member2_position}</p></div></div>` : '<div class="text-center p-6 bg-rose-50 text-rose-500 mt-6 rounded-xl font-bold no-print">⚠️ กรุณาตั้งค่ากรรมการ</div>';
+        }
+
+        async function generateExpiryReport() {
+            const f = document.getElementById('expiry-filter-select').value; const today = new Date().toISOString().split('T')[0]; let q = supabaseClient.from('stock_transactions').select('*, medicines(name, unit, package_size)').eq('transaction_type', 'IN').gt('quantity', 0);
+            if(f === 'expired') q = q.lt('expiry_date', today); else q = q.lte('expiry_date', new Date(new Date().setDate(new Date().getDate()+parseInt(f))).toISOString().split('T')[0]).gte('expiry_date', today);
+            const { data } = await q.order('expiry_date', { ascending: true });
+            document.getElementById('expiry-report-table').innerHTML = data.length ? data.map(t => `<tr class="border-b text-black"><td class="p-4 font-bold">${t.medicines.name}</td><td class="p-4 text-center">${t.lot_no||'-'}</td><td class="p-4 text-center font-bold ${f==='expired'?'text-rose-600 bg-rose-50':'text-orange-500'}">${new Date(t.expiry_date).toLocaleDateString('th-TH')}</td><td class="p-4 text-right font-black">${t.quantity}</td><td class="p-4 text-center">${t.medicines.unit} <span class="text-xs text-slate-500">(บรรจุ ${t.medicines.package_size || '1x1'})</span></td></tr>`).join('') : '<tr><td colspan="5" class="p-10 text-center italic">ไม่มีข้อมูล</td></tr>';
         }
 
         function generateLowStockReport() {
             const low = gMeds.filter(m => m.stock_balance <= (m.min_stock || 0));
-            let html = low.length ? low.map((m, i) => `<tr class="text-black"><td class="border border-black p-3 text-center">${i+1}</td><td class="border border-black p-3 text-left font-bold">${m.name}</td><td class="border border-black p-3 text-center">${m.category}</td><td class="border border-black p-3 text-center font-bold text-moph-dark">${m.package_size || '1x1'}</td><td class="border border-black p-3 text-center font-bold text-blue-600">${Math.max(1, (m.min_stock*2)-m.stock_balance)} ${m.unit}</td><td class="border border-black p-3 text-xs opacity-40">Min: ${m.min_stock}</td></tr>`).join('') : '<tr><td colspan="6" class="border border-black p-5 text-center">อักษรคลังยาปกติ ไม่มีรายการต้องเบิก</td></tr>';
+            let html = low.length ? low.map((m, i) => `<tr class="text-black"><td class="border border-black p-3 text-center">${i+1}</td><td class="border border-black p-3 text-left font-bold">${m.name}</td><td class="border border-black p-3 text-center">${m.category}</td><td class="border border-black p-3 text-center font-bold text-moph-dark">${m.package_size || '1x1'}</td><td class="border border-black p-3 text-center font-bold text-blue-600">${Math.max(1, (m.min_stock*2)-m.stock_balance)} ${m.unit}</td><td class="border border-black p-3 text-xs opacity-40">Min: ${m.min_stock}</td></tr>`).join('') : '<tr><td colspan="6" class="border border-black p-5 text-center">คลังยาปกติ ไม่มีรายการต้องเบิก</td></tr>';
             document.getElementById('lowstock-report-table').innerHTML = html;
         }
 
         async function importCSV(event) {
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
             reader.onload = async function(e) {
                 const rows = e.target.result.split('\n').filter(row => row.trim() !== '');
                 const headers = rows[0].split(',').map(h => h.trim().replace(/\r/g, ''));
+                const reqH = ['name', 'category', 'unit', 'price', 'min_stock', 'stock_balance'];
+                if(!reqH.every(h => headers.includes(h))) { alert('คอลัมน์ไม่ถูกต้อง! ต้องมีอย่างน้อย: name, category, unit, price, min_stock, stock_balance'); return; }
                 const insertData = [];
                 for(let i = 1; i < rows.length; i++) {
                     const cols = rows[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || rows[i].split(',');
-                    const rowObj = {};
-                    headers.forEach((h, idx) => { let v = cols[idx]?cols[idx].replace(/^"|"$/g, '').trim() : ''; if(['price', 'min_stock', 'stock_balance'].includes(h)) v = parseFloat(v)||0; rowObj[h] = v; });
-                    if(!rowObj.package_size) rowObj.package_size = '1x1'; // ตั้งค่าเริ่มต้นถ้าไฟล์ CSV เก่าไม่มีคอลัมน์นี้
-                    insertData.push(rowObj);
+                    if(cols.length === headers.length) {
+                        const rowObj = {};
+                        headers.forEach((h, idx) => { let v = cols[idx]?cols[idx].replace(/^"|"$/g, '').trim() : ''; if(['price', 'min_stock', 'stock_balance'].includes(h)) v = parseFloat(v)||0; rowObj[h] = v; });
+                        if(!rowObj.package_size) rowObj.package_size = '1x1';
+                        insertData.push(rowObj);
+                    }
                 }
-                try { await supabaseClient.from('medicines').insert(insertData); alert('นำเข้าสำเร็จ!'); loadData(); } catch(err) { alert('Error: ' + err.message); }
-            };
-            reader.readAsText(file, 'UTF-8');
+                if(confirm(`เตรียมนำเข้าข้อมูล ${insertData.length} รายการ ต้องการดำเนินการหรือไม่?`)) { try { await supabaseClient.from('medicines').insert(insertData); alert('นำเข้าสำเร็จ!'); loadData(); } catch(err) { alert('Error: ' + err.message); } }
+                event.target.value = '';
+            }; reader.readAsText(file, 'UTF-8');
         }
 
-        function closeNotiModal() { document.getElementById('noti-modal').classList.replace('flex', 'hidden'); }
-        function showNotiModal() { document.getElementById('noti-modal').classList.replace('hidden', 'flex'); }
-        function logout() { location.reload(); }
+        function downloadFile(content, fileName, mimeType) { const a = document.createElement('a'); const file = new Blob([content], {type: mimeType}); a.href = URL.createObjectURL(file); a.download = fileName; a.click(); URL.revokeObjectURL(a.href); }
+        async function exportToCSV(tableName) { try { let query = supabaseClient.from(tableName).select('*'); if (tableName === 'stock_transactions') query = supabaseClient.from('stock_transactions').select('*, medicines(name)').order('created_at', { ascending: false }); else if (tableName === 'medicines') query = supabaseClient.from('medicines').select('*').order('name'); const { data } = await query; if(!data || data.length === 0) { alert("ไม่มีข้อมูล"); return; } let csv = '\uFEFF'; const headers = Object.keys(data[0]).map(k => k === 'medicines' ? 'medicine_name' : k); csv += headers.join(',') + '\n'; data.forEach(row => { const values = Object.keys(row).map(k => { let val = row[k]; if (k === 'medicines') val = val ? val.name : ''; if (val === null || val === undefined) val = ''; val = String(val).replace(/"/g, '""'); if (val.search(/("|,|\n)/g) >= 0) val = `"${val}"`; return val; }); csv += values.join(',') + '\n'; }); downloadFile(csv, `TCN_${tableName}_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv;charset=utf-8;'); } catch (err) { alert("Error: " + err.message); } }
+        async function backupAllDataJSON() { try { const { data: meds } = await supabaseClient.from('medicines').select('*'); const { data: trans } = await supabaseClient.from('stock_transactions').select('*'); const { data: comm } = await supabaseClient.from('committees').select('*'); const settings = JSON.parse(localStorage.getItem('tcn_settings')) || {}; const personnel = JSON.parse(localStorage.getItem('tcn_personnel')) || []; const backupData = { backup_date: new Date().toISOString(), settings: settings, personnel: personnel, medicines: meds, stock_transactions: trans, committees: comm }; downloadFile(JSON.stringify(backupData, null, 2), `TCN_Full_Backup_${new Date().toISOString().split('T')[0]}.json`, 'application/json'); } catch (err) { alert("Error: " + err.message); } }
+        function printPortraitReport() { document.getElementById('print-page-style').innerHTML = '@page { size: portrait; margin: 1cm; }'; window.print(); }
+        function printLandscapeReport() { document.getElementById('print-page-style').innerHTML = '@page { size: landscape; margin: 1cm; }'; window.print(); }
     </script>
 </body>
 </html>
